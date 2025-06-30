@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.ksp)
 }
 
 android {
@@ -40,6 +41,26 @@ android {
 }
 
 dependencies {
+
+    //retrofit
+    implementation(libs.retrofit2)
+    implementation(libs.retrofit2.gsonConverter)
+    implementation(libs.retrofit2.okhttp)
+    implementation(libs.retrofit2.okhttpLoggingInterceptor)
+
+    //koin
+    implementation(project.dependencies.platform(libs.koin.bom))
+    implementation(libs.koin.core)
+    implementation(libs.koin.android)
+    implementation(libs.koin.compose)
+
+    //coroutines
+    implementation(libs.kotlin.coroutines)
+
+    //room
+    implementation(libs.room)
+    ksp(libs.room.ksp)
+    implementation(libs.room.ktx)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

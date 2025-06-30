@@ -62,6 +62,7 @@ dependencies {
     ksp(libs.room.ksp)
     implementation(libs.room.ktx)
 
+    implementation(libs.google.code.gson)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

@@ -11,6 +11,7 @@ composeBom = "2024.09.00"
 retrofit2 = "2.9.0"
 okhttp = "4.10.0"
 gsonConverter = "2.9.0"
+gson = "2.13.1"
 loggingInterceptor = "4.12.0"
 koinBom = "4.1.0"
 coroutines = "1.10.2"
@@ -32,6 +33,7 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+google-code-gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 
 retrofit2 = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit2" }
 retrofit2-gsonConverter = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "gsonConverter" }

@@ -2,6 +2,7 @@ package com.kabigon.weatherforecast.ui.forecast
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kabigon.weatherforecast.BuildConfig
 import com.kabigon.weatherforecast.data.base.model.ResultResponse
 import com.kabigon.weatherforecast.data.base.model.asResult
 import com.kabigon.weatherforecast.data.base.model.onError
@@ -12,7 +13,6 @@ import com.kabigon.weatherforecast.data.service.repository.IWeatherRepository
 import com.kabigon.weatherforecast.usecase.ForecastIconMapper
 import com.kabigon.weatherforecast.usecase.TimezoneMapper
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -51,7 +51,7 @@ class ForecastViewModel(
             repository.getWeather(
                 request = WeatherRequest(
                     cityName = query.lowercase(),
-                    apiKey = "ed1cdaa732fc2e16136da32c7391e799"
+                    apiKey = BuildConfig.API_KEY
                 )
             )
         }

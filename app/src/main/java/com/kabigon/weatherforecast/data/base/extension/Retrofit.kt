@@ -1,5 +1,7 @@
 package com.kabigon.weatherforecast.data.base.extension
 
+import com.google.gson.Gson
+import com.kabigon.weatherforecast.data.base.model.ApiError
 import com.kabigon.weatherforecast.data.base.model.ErrorResponse
 import com.kabigon.weatherforecast.data.base.model.ResultResponse
 import retrofit2.Response
@@ -13,7 +15,7 @@ fun <T> Response<T>.toNetworkResult(): ResultResponse<T> {
             val errorMessage = if (errorBody.isNullOrEmpty()) {
                 this.message()
             } else {
-                errorBody
+                Gson().fromJson(errorBody, ApiError::class.java).message
             }
 
             return ResultResponse.Error(

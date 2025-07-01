@@ -2,6 +2,7 @@ package com.kabigon.weatherforecast.ui.forecast
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -125,6 +126,13 @@ fun ForecastScreen(
 
             if (uiState.isLoading) {
                 LoadingScreen()
+            } else if (uiState.error != null) {
+                ErrorScreen(
+                    modifier = Modifier.fillMaxSize()
+                        .padding(top = 80.dp)
+                        .zIndex(0f),
+                    errorMessage = uiState.error
+                )
             } else {
                 ResultScreen(
                     modifier = Modifier.fillMaxSize()
@@ -277,11 +285,46 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
         contentAlignment = Alignment.Center
     ) {
         LottieAnimation(
-            modifier = Modifier.size(84.dp),
+            modifier = Modifier.size(120.dp),
             composition = composition,
             iterations = LottieConstants.IterateForever,
         )
     }
+}
+
+@Composable
+fun ErrorScreen(
+    modifier: Modifier = Modifier,
+    errorMessage: String
+) {
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                modifier = Modifier.size(120.dp),
+                painter = painterResource(id = R.drawable.error),
+                contentDescription = "Error"
+            )
+
+            Spacer(modifier = Modifier.size(16.dp))
+            Text(
+                text = errorMessage,
+                style = Typography.titleLarge
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ErrorScreenPreview() {
+    ErrorScreen(
+        errorMessage = "Something went wrong"
+    )
 }
 
 @Preview(showBackground = true)

@@ -12,11 +12,10 @@ import com.kabigon.weatherforecast.data.service.repository.IWeatherRepository
 import com.kabigon.weatherforecast.usecase.ForecastIconMapper
 import com.kabigon.weatherforecast.usecase.TimezoneMapper
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.stateIn

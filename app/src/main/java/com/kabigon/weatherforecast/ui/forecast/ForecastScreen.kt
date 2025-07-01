@@ -26,6 +26,7 @@ import androidx.compose.ui.zIndex
 import com.kabigon.weatherforecast.ui.component.CustomTextField
 import kotlinx.coroutines.delay
 
+
 @SuppressLint("UseOfNonLambdaOffsetOverload")
 @Composable
 fun ForecastScreen(

@@ -1,4 +1,4 @@
-package com.kabigon.weatherforecast.data.base
+package com.kabigon.weatherforecast.data.base.network
 
 import android.util.Log
 import com.google.gson.GsonBuilder

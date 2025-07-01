@@ -1,4 +1,4 @@
-package com.kabigon.weatherforecast.data.base
+package com.kabigon.weatherforecast.data.base.network
 
 import retrofit2.Converter
 import retrofit2.Retrofit

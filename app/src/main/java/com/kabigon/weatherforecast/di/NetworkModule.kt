@@ -1,7 +1,9 @@
 package com.kabigon.weatherforecast.di
 
-import com.kabigon.weatherforecast.data.base.ApiManager
-import com.kabigon.weatherforecast.data.base.NetworkClient
+import com.kabigon.weatherforecast.data.base.network.ApiManager
+import com.kabigon.weatherforecast.data.base.network.NetworkClient
+import com.kabigon.weatherforecast.data.service.repository.IWeatherRepository
+import com.kabigon.weatherforecast.data.service.repository.WeatherRepository
 import com.kabigon.weatherforecast.data.service.repository.remote.IWeatherRemote
 import com.kabigon.weatherforecast.data.service.repository.remote.WeatherRemote
 import org.koin.android.ext.koin.androidContext
@@ -24,6 +26,12 @@ val networkModule = module {
 
     factory<IWeatherRemote> {
         WeatherRemote(
+            get()
+        )
+    }
+
+    factory<IWeatherRepository> {
+        WeatherRepository(
             get()
         )
     }

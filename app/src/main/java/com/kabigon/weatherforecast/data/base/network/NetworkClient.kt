@@ -1,4 +1,4 @@
-package com.kabigon.weatherforecast.data.base
+package com.kabigon.weatherforecast.data.base.network
 
 import android.content.Context
 import okhttp3.Interceptor

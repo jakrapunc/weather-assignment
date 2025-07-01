@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,15 +24,33 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.kabigon.weatherforecast.ui.component.CustomTextField
+import kotlinx.coroutines.delay
 
 @SuppressLint("UseOfNonLambdaOffsetOverload")
 @Composable
-fun ForecastScreen() {
+fun ForecastScreen(
+    onValueChange: (String) -> Unit = {},
+) {
     Scaffold(
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
-        var a by remember { mutableStateOf("London") }
+        var textQuery by remember { mutableStateOf("London") }
         var hasFocus by remember { mutableStateOf(false) }
+        val searchDebounce = 3000L
+
+        // This LaunchedEffect will re-launch whenever textValue changes.
+        // If textValue changes again before the delay completes, the previous
+        // coroutine launched by this effect will be cancelled and a new one started.
+        LaunchedEffect(textQuery) {
+            if (textQuery.isNotBlank()) {
+                delay(searchDebounce)
+
+                onValueChange(textQuery)
+            } else {
+                onValueChange("")
+            }
+        }
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -49,11 +68,11 @@ fun ForecastScreen() {
                 )
 
                 CustomTextField(
-                    value = a,
+                    value = textQuery,
                     onValueChange = {
-                        a = it
+                        textQuery = it
                     },
-                    onClear = { a = "" },
+                    onClear = { textQuery = "" },
                     modifier = Modifier
                         .offset(y = targetOffsetY)
                         .onFocusChanged { focusState: FocusState ->

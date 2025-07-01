@@ -1,17 +1,21 @@
 package com.kabigon.weatherforecast.ui.forecast
 
 import android.annotation.SuppressLint
+import android.graphics.drawable.Icon
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,6 +29,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -150,7 +156,11 @@ fun ResultScreen(
                     style = Typography.titleLarge.copy(fontSize = 32.sp)
                 )
             }
-            Spacer(modifier = Modifier.size(8.dp))
+            Text(
+                text = "Feels like ${weatherResponse.main.feelsLike}",
+                style = Typography.titleLarge
+            )
+            Spacer(modifier = Modifier.size(16.dp))
 
             Text(
                 text = weatherResponse.cityName,
@@ -166,7 +176,74 @@ fun ResultScreen(
             )
             Text(text = uiState.date ?: "")
 
+            Spacer(modifier = Modifier.size(16.dp))
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                uiState.weatherIcon?.let {
+                    Icon(
+                        painter = painterResource(id = uiState.weatherIcon),
+                        tint = Color.Unspecified,
+                        contentDescription = "",
+                    )
+                    Text(
+                        text = uiState.response.weather.getOrNull(0)?.description ?: "",
+                        style = Typography.titleLarge
+                    )
+                }
+            }
 
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    DisplayItem(header = "Temperature Max", value = "${uiState.response.main.tempMax}", tail = "°C")
+                    DisplayItem(header = "Temperature Min", value = "${uiState.response.main.tempMin}", tail = "°C")
+                    DisplayItem(header = "Humidity", value = "${uiState.response.main.humidity}", tail = "%")
+                    DisplayItem(header = "Pressure", value = "${uiState.response.main.pressure}", tail = "hPa")
+                    DisplayItem(header = "Wind", value = "${uiState.response.wind.speed}", tail = "m/s")
+                }
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    DisplayItem(header = "Sunrise", value = "${uiState.sunrise}")
+                    DisplayItem(header = "Sunset", value = "${uiState.sunset}")
+//                    DisplayItem(header = "Clouds", value = "${uiState.response.c}", tail = "%")
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun DisplayItem(
+    header: String,
+    value: String,
+    tail: String? = null
+) {
+    Row {
+        Text(
+            text = "$header:",
+            style = Typography.bodyMedium,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.size(4.dp))
+        Text(
+            text = value,
+            style = Typography.bodyMedium
+        )
+        tail?.let {
+            Text(
+                text = tail,
+                style = Typography.bodyMedium
+            )
         }
     }
 }
@@ -180,6 +257,8 @@ fun ResultScreenPreview() {
             weatherIcon = R.drawable.ic01d,
             date = "2 July 2025",
             time = "12:00",
+            sunrise = "06:00",
+            sunset = "18:00",
             response = WeatherResponse(
                 cityName = "London",
                 weather = listOf(

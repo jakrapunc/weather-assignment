@@ -66,7 +66,9 @@ class ForecastViewModel(
             response = response,
             weatherIcon = response?.let { iconMapper(it.weather.first().icon) },
             date = times?.getOrNull(0),
-            time = times?.getOrNull(1)
+            time = times?.getOrNull(1),
+            sunset = response?.let { timezoneMapper(it.sys.sunset, it.timezone.toLong()).getOrNull(1) },
+            sunrise = response?.let { timezoneMapper(it.sys.sunrise, it.timezone.toLong()).getOrNull(1) }
         )
     }.stateIn(
         scope = viewModelScope,
@@ -96,6 +98,8 @@ class ForecastViewModel(
         val error: String? = null,
         val weatherIcon: Int? = null,
         val date: String? = null,
-        val time: String? = null
+        val time: String? = null,
+        val sunset: String? = null,
+        val sunrise: String? = null
     )
 }

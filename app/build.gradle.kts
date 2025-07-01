@@ -64,6 +64,9 @@ dependencies {
     ksp(libs.room.ksp)
     implementation(libs.room.ktx)
 
+    //lottie
+    implementation(libs.lottie)
+
     implementation(libs.google.code.gson)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

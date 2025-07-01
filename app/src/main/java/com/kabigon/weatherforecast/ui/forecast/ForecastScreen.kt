@@ -33,6 +33,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.kabigon.weatherforecast.R
 import com.kabigon.weatherforecast.data.model.Clouds
 import com.kabigon.weatherforecast.data.model.Main
@@ -119,12 +123,16 @@ fun ForecastScreen(
                 )
             }
 
-            ResultScreen(
-                modifier = Modifier.fillMaxSize()
-                    .padding(top = 80.dp)
-                    .zIndex(0f),
-                uiState = uiState
-            )
+            if (uiState.isLoading) {
+                LoadingScreen()
+            } else {
+                ResultScreen(
+                    modifier = Modifier.fillMaxSize()
+                        .padding(top = 80.dp)
+                        .zIndex(0f),
+                    uiState = uiState
+                )
+            }
         }
     }
 }
@@ -143,7 +151,7 @@ fun ResultScreen(
             Row {
                 Text(
                     modifier = Modifier.alignByBaseline(),
-                    text = "${weatherResponse.main.temp}",
+                    text = "${weatherResponse.main.temp.toInt()}",
                     style = Typography.titleLarge.copy(
                         fontSize = 64.sp
                     )
@@ -158,7 +166,7 @@ fun ResultScreen(
             Row {
                 Text(
                     modifier = Modifier.alignByBaseline(),
-                    text = "Feels like ${weatherResponse.main.feelsLike}",
+                    text = "Feels like ${weatherResponse.main.feelsLike.toInt()}",
                     style = Typography.titleLarge
                 )
                 Spacer(modifier = Modifier.size(4.dp))
@@ -257,6 +265,22 @@ fun DisplayItem(
                 style = Typography.bodyMedium
             )
         }
+    }
+}
+
+@Composable
+fun LoadingScreen(modifier: Modifier = Modifier) {
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading))
+
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        LottieAnimation(
+            modifier = Modifier.size(84.dp),
+            composition = composition,
+            iterations = LottieConstants.IterateForever,
+        )
     }
 }
 

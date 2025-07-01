@@ -2,6 +2,7 @@ package com.kabigon.weatherforecast.ui.forecast
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kabigon.weatherforecast.data.base.model.ResultResponse
 import com.kabigon.weatherforecast.data.base.model.asResult
 import com.kabigon.weatherforecast.data.base.model.onError
 import com.kabigon.weatherforecast.data.base.model.onSuccess
@@ -14,6 +15,8 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.stateIn
@@ -35,16 +38,24 @@ class ForecastViewModel(
         _retry,
         _query
     ) { _, query ->
-        _isLoading.value = true
-        _error.value = null
-        _response.value = null
+        if (query.isEmpty()) {
+            _isLoading.value = false
+            _error.value = null
+            _response.value = null
 
-        repository.getWeather(
-            request = WeatherRequest(
-                cityName = query.lowercase(),
-                apiKey = "ed1cdaa732fc2e16136da32c7391e799"
+            ResultResponse.Success(null)
+        } else {
+            _isLoading.value = true
+            _error.value = null
+            _response.value = null
+
+            repository.getWeather(
+                request = WeatherRequest(
+                    cityName = query.lowercase(),
+                    apiKey = "ed1cdaa732fc2e16136da32c7391e799"
+                )
             )
-        )
+        }
     }.onError {
         _error.value = it?.message
         _isLoading.value = false

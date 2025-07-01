@@ -1,6 +1,7 @@
 package com.kabigon.weatherforecast
 
 import android.app.Application
+import com.kabigon.weatherforecast.di.forecastModule
 import com.kabigon.weatherforecast.di.networkModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -21,5 +22,6 @@ class WeatherApplication: Application() {
 }
 
 val appModule = listOf(
-    networkModule
+    networkModule,
+    forecastModule
 )

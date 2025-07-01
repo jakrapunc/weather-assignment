@@ -1,9 +1,7 @@
 package com.kabigon.weatherforecast.ui.forecast
 
 import android.annotation.SuppressLint
-import android.graphics.drawable.Icon
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -11,7 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -37,7 +34,9 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kabigon.weatherforecast.R
+import com.kabigon.weatherforecast.data.model.Clouds
 import com.kabigon.weatherforecast.data.model.Main
+import com.kabigon.weatherforecast.data.model.Climate
 import com.kabigon.weatherforecast.data.model.Sys
 import com.kabigon.weatherforecast.data.model.Weather
 import com.kabigon.weatherforecast.data.model.Wind
@@ -156,10 +155,19 @@ fun ResultScreen(
                     style = Typography.titleLarge.copy(fontSize = 32.sp)
                 )
             }
-            Text(
-                text = "Feels like ${weatherResponse.main.feelsLike}",
-                style = Typography.titleLarge
-            )
+            Row {
+                Text(
+                    modifier = Modifier.alignByBaseline(),
+                    text = "Feels like ${weatherResponse.main.feelsLike}",
+                    style = Typography.titleLarge
+                )
+                Spacer(modifier = Modifier.size(4.dp))
+                Text(
+                    modifier = Modifier.alignByBaseline(),
+                    text = "°C",
+                    style = Typography.titleLarge.copy(fontSize = 12.sp)
+                )
+            }
             Spacer(modifier = Modifier.size(16.dp))
 
             Text(
@@ -177,6 +185,7 @@ fun ResultScreen(
             Text(text = uiState.date ?: "")
 
             Spacer(modifier = Modifier.size(16.dp))
+
             Row(
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                 verticalAlignment = Alignment.CenterVertically
@@ -194,28 +203,31 @@ fun ResultScreen(
                 }
             }
 
+            Spacer(modifier = Modifier.size(32.dp))
+
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(
-                    modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    DisplayItem(header = "Temperature Max", value = "${uiState.response.main.tempMax}", tail = "°C")
-                    DisplayItem(header = "Temperature Min", value = "${uiState.response.main.tempMin}", tail = "°C")
+                    DisplayItem(header = "Max", value = "${uiState.response.main.tempMax}", tail = "°C")
+                    DisplayItem(header = "Min", value = "${uiState.response.main.tempMin}", tail = "°C")
                     DisplayItem(header = "Humidity", value = "${uiState.response.main.humidity}", tail = "%")
                     DisplayItem(header = "Pressure", value = "${uiState.response.main.pressure}", tail = "hPa")
                     DisplayItem(header = "Wind", value = "${uiState.response.wind.speed}", tail = "m/s")
                 }
+                Spacer(modifier = Modifier.size(48.dp))
                 Column(
-                    modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
+
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     DisplayItem(header = "Sunrise", value = "${uiState.sunrise}")
                     DisplayItem(header = "Sunset", value = "${uiState.sunset}")
-//                    DisplayItem(header = "Clouds", value = "${uiState.response.c}", tail = "%")
+                    DisplayItem(header = "Clouds", value = "${uiState.response.clouds.all}", tail = "%")
+                    DisplayItem(header = "Rain", value = "${uiState.response.rain?.oneHour ?: "-"}", tail = "mm/h")
+                    DisplayItem(header = "Snow", value = "${uiState.response.snow?.oneHour ?: "-"}", tail = "mm/h")
                 }
             }
         }
@@ -239,7 +251,7 @@ fun DisplayItem(
             text = value,
             style = Typography.bodyMedium
         )
-        tail?.let {
+        if (tail != null && value != "-") {
             Text(
                 text = tail,
                 style = Typography.bodyMedium
@@ -292,6 +304,15 @@ fun ResultScreenPreview() {
                     country = "GB",
                     sunrise = 1726660758,
                     sunset = 1726660758
+                ),
+                clouds = Clouds(
+                    all = 100
+                ),
+                rain = Climate(
+                    2.73
+                ),
+                snow = Climate(
+                    2.73
                 )
             )
         )

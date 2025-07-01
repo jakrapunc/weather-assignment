@@ -1,7 +1,9 @@
 package com.kabigon.weatherforecast.data.model.response
 
 import com.google.gson.annotations.SerializedName
+import com.kabigon.weatherforecast.data.model.Clouds
 import com.kabigon.weatherforecast.data.model.Main
+import com.kabigon.weatherforecast.data.model.Climate
 import com.kabigon.weatherforecast.data.model.Sys
 import com.kabigon.weatherforecast.data.model.Weather
 import com.kabigon.weatherforecast.data.model.Wind
@@ -24,5 +26,11 @@ data class WeatherResponse(
     @SerializedName("sys")
     val sys: Sys,
     @SerializedName("id")
-    val id: Int
+    val id: Int,
+    @SerializedName("clouds")
+    val clouds: Clouds,
+    @SerializedName("rain")
+    val rain: Climate?,
+    @SerializedName("snow")
+    val snow: Climate?
 )

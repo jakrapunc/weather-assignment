@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kabigon.weatherforecast.ui.component.CustomTextField
+import com.kabigon.weatherforecast.ui.forecast.ForecastScreen
 import com.kabigon.weatherforecast.ui.theme.WeatherForecastTheme
 
 class MainActivity : ComponentActivity() {
@@ -24,37 +25,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             WeatherForecastTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Column(
-                        modifier = Modifier.padding(innerPadding)
-                    ) {
-
-                    }
-                }
+                ForecastScreen()
             }
         }
-    }
-}
-
-@Composable
-fun InputLayout() {
-    Column(
-        modifier = Modifier.fillMaxWidth()
-            .padding(horizontal = 20.dp)
-    ) {
-
-        CustomTextField(
-            value = "London",
-            onValueChange = {},
-            placeholder = "Type Here"
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun InputLayoutPreview() {
-    WeatherForecastTheme {
-        InputLayout()
     }
 }

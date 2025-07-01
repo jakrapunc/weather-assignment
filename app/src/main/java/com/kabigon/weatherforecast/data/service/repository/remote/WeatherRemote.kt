@@ -22,7 +22,7 @@ class WeatherRemote(
     }
 
     private val weatherService = apiManager.init(
-        "http://api.openweathermap.org/"
+        "https://api.openweathermap.org/"
     ).create(WeatherService::class.java)
 
     override suspend fun getWeather(

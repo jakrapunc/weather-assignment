@@ -23,14 +23,33 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kabigon.weatherforecast.ui.component.CustomTextField
 import kotlinx.coroutines.delay
+import org.koin.compose.viewmodel.koinViewModel
 
+@Composable
+fun ForecastScreen(
+    viewModel: ForecastViewModel = koinViewModel()
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    ForecastScreen(
+        uiState = uiState,
+        onValueChange = {
+            viewModel.onUIEvent(
+                ForecastViewModel.OnUIEvent.Search(it)
+            )
+        }
+    )
+}
 
 @SuppressLint("UseOfNonLambdaOffsetOverload")
 @Composable
 fun ForecastScreen(
+    uiState: ForecastViewModel.UIState = ForecastViewModel.UIState(),
     onValueChange: (String) -> Unit = {},
+    onRetry: () -> Unit = {}
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize()
@@ -99,5 +118,7 @@ fun ForecastScreen(
 @Preview
 @Composable
 fun ForecastScreenPreview() {
-    ForecastScreen()
+    ForecastScreen(
+        uiState = ForecastViewModel.UIState()
+    )
 }

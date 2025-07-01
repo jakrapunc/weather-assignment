@@ -7,7 +7,7 @@ import com.kabigon.weatherforecast.data.base.model.onError
 import com.kabigon.weatherforecast.data.base.model.onSuccess
 import com.kabigon.weatherforecast.data.model.request.WeatherRequest
 import com.kabigon.weatherforecast.data.model.response.WeatherResponse
-import com.kabigon.weatherforecast.data.service.repository.WeatherRepository
+import com.kabigon.weatherforecast.data.service.repository.IWeatherRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.stateIn
 
 class ForecastViewModel(
-    private val repository: WeatherRepository,
+    private val repository: IWeatherRepository,
     private val ioDispatcher: CoroutineDispatcher
 ): ViewModel() {
 
@@ -38,7 +38,7 @@ class ForecastViewModel(
         repository.getWeather(
             request = WeatherRequest(
                 cityName = query.lowercase(),
-                apiKey = ""
+                apiKey = "ed1cdaa732fc2e16136da32c7391e799"
             )
         )
     }.onError {

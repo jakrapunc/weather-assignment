@@ -8,6 +8,8 @@ import com.kabigon.weatherforecast.data.base.model.onSuccess
 import com.kabigon.weatherforecast.data.model.request.WeatherRequest
 import com.kabigon.weatherforecast.data.model.response.WeatherResponse
 import com.kabigon.weatherforecast.data.service.repository.IWeatherRepository
+import com.kabigon.weatherforecast.usecase.ForecastIconMapper
+import com.kabigon.weatherforecast.usecase.TimezoneMapper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -18,6 +20,8 @@ import kotlinx.coroutines.flow.stateIn
 
 class ForecastViewModel(
     private val repository: IWeatherRepository,
+    private val iconMapper: ForecastIconMapper,
+    private val timezoneMapper: TimezoneMapper,
     private val ioDispatcher: CoroutineDispatcher
 ): ViewModel() {
 
@@ -55,10 +59,14 @@ class ForecastViewModel(
         _error,
         _response
     ) { isLoading, error, response ->
+        val times = response?.let { timezoneMapper(it.timeStamp, it.timezone.toLong()) }
         UIState(
             isLoading = isLoading,
             error = error,
-            response = response
+            response = response,
+            weatherIcon = response?.let { iconMapper(it.weather.first().icon) },
+            date = times?.getOrNull(0),
+            time = times?.getOrNull(1)
         )
     }.stateIn(
         scope = viewModelScope,
@@ -69,7 +77,6 @@ class ForecastViewModel(
     fun onUIEvent(event: OnUIEvent) {
         when(event) {
             is OnUIEvent.Search -> {
-                //do some search
                 _query.value = event.query
             }
             is OnUIEvent.Retry -> {
@@ -86,6 +93,9 @@ class ForecastViewModel(
     data class UIState(
         val isLoading: Boolean = false,
         val response: WeatherResponse? = null,
-        val error: String? = null
+        val error: String? = null,
+        val weatherIcon: Int? = null,
+        val date: String? = null,
+        val time: String? = null
     )
 }

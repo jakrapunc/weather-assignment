@@ -113,6 +113,7 @@ fun ForecastScreen(
                     onValueChange = {
                         textQuery = it
                     },
+                    placeholder = "Search City",
                     onClear = { textQuery = "" },
                     modifier = Modifier
                         .offset(y = targetOffsetY)

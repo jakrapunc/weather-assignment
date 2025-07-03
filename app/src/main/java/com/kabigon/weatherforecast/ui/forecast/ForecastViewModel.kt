@@ -13,13 +13,18 @@ import com.kabigon.weatherforecast.data.service.repository.IWeatherRepository
 import com.kabigon.weatherforecast.usecase.ForecastIconMapper
 import com.kabigon.weatherforecast.usecase.TimezoneMapper
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.stateIn
 
+@OptIn(FlowPreview::class)
 class ForecastViewModel(
     private val repository: IWeatherRepository,
     private val iconMapper: ForecastIconMapper,
@@ -33,9 +38,20 @@ class ForecastViewModel(
     private var _query = MutableStateFlow("")
     private val _response = MutableStateFlow<WeatherResponse?>(null)
 
+    val updateQuery = _query.debounce(
+        2000L
+    ).filter { query ->
+        if (query.isEmpty()) {
+            _query.value = ""
+            return@filter false
+        } else {
+            return@filter true
+        }
+    }.distinctUntilChanged()
+
     val response = combine(
         _retry,
-        _query
+        updateQuery
     ) { _, query ->
         if (query.isEmpty()) {
             _isLoading.value = false

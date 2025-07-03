@@ -16,6 +16,8 @@ See weather forecast from openweathermap api (https://openweathermap.org)
 apiKey = "REPLACE_YOUR_API_KEY"
 ```
 
+3. Rebuild project again with command `./gradlew assembleDebug`
+
 ### Features
 
 - [ ] Room Database

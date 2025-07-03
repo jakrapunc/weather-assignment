@@ -49,6 +49,8 @@ import com.kabigon.weatherforecast.data.model.response.WeatherResponse
 import com.kabigon.weatherforecast.ui.component.CustomTextField
 import com.kabigon.weatherforecast.ui.theme.Typography
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.debounce
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -79,17 +81,9 @@ fun ForecastScreen(
     ) { innerPadding ->
         var textQuery by remember { mutableStateOf("") }
         var hasFocus by remember { mutableStateOf(false) }
-        val searchDebounce = 3000L
 
-        // This LaunchedEffect will re-launch whenever textValue changes.
-        // If textValue changes again before the delay completes, the previous
-        // coroutine launched by this effect will be cancelled and a new one started.
         LaunchedEffect(textQuery) {
-            if (textQuery.isNotBlank()) {
-                delay(searchDebounce)
-
-                onValueChange(textQuery)
-            }
+            onValueChange(textQuery)
         }
 
         Box(
